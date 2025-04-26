@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const height = canvasBlue.height;
 
     // Parámetros de puntos
-    const DOT_RADIUS = 2;  // Increased size for square pixels (was 1.3)
+    const DOT_RADIUS = 1.2;  // Unchanged
     const MM_TO_PX = 3.78;
     const STEP_MM = 1;
     const MIN_DIST_MM = 1.5;  // Increase for proper spacing with larger dots
@@ -59,8 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const GRID_SIZE = Math.floor(width / MIN_DIST_PX);
     const DOT_COUNT_X = GRID_SIZE;
     const DOT_COUNT_Y = GRID_SIZE;
-    const BACKGROUND_DOT_COUNT = 25000; // Adjusted for proper density with larger dots
-    const C_DOT_COUNT = 800; // Adjusted for C shape
+    const BACKGROUND_DOT_COUNT = 25000; // Keep the same for black dots
+    const C_DOT_COUNT = 2400; // Increased from 800 to 2400 (3x more)
     const C_SIZE = 350;
     const C_THICKNESS = 60;
     const C_HOLE_ANGLE = Math.PI / 8;
