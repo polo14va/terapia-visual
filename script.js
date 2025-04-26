@@ -16,17 +16,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Obtener colores calibrados de forma segura
-    const colorRed = getStoredColor('tv_calibRectRed', '#ff0000');
-    const colorBlue = getStoredColor('tv_calibRectBlue', '#00ecff');
-    const bgColor = getStoredColor('tv_calibBg', '#fafbfc'); // Default background light gray
-    // Use black for all dots - they should be the same color in each canvas
-    const dotColor = '#000000';
-
+    const colorRed = getStoredColor('tv_redColor', '#ff0000');
+    const colorCyan = getStoredColor('tv_blueColor', '#00FFFF');
+    const bgColor = getStoredColor('tv_bgColor', '#FFFFFF'); // Pure white background
+    const blackColor = '#000000'; // Pure black for dots
+    
     // Apply calibrated background color to body
     document.body.style.backgroundColor = bgColor;
 
     // *** ADDED: Log the colors being used ***
-    console.log('Using colors:', { colorRed, colorBlue, bgColor, dotColor });
+    console.log('Using colors:', { colorRed, colorCyan, bgColor });
 
     // Canvas y contexto
     const canvasBlue = document.getElementById('canvasBlue');
@@ -52,22 +51,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const height = canvasBlue.height;
 
     // Parámetros de puntos
-    const DOT_RADIUS = 1;  // Keep dot size at 1px to match the image
+    const DOT_RADIUS = 2;  // Increased size for square pixels (was 1.3)
     const MM_TO_PX = 3.78;
     const STEP_MM = 1;
-    const MIN_DIST_MM = 1;    // Increased from 0.5 to prevent dot overlap
+    const MIN_DIST_MM = 1.5;  // Increase for proper spacing with larger dots
     const MIN_DIST_PX = MIN_DIST_MM * MM_TO_PX;
     const GRID_SIZE = Math.floor(width / MIN_DIST_PX);
     const DOT_COUNT_X = GRID_SIZE;
     const DOT_COUNT_Y = GRID_SIZE;
-    const BACKGROUND_DOT_COUNT = 20000;
-    const C_DOT_COUNT = 600;
+    const BACKGROUND_DOT_COUNT = 25000; // Adjusted for proper density with larger dots
+    const C_DOT_COUNT = 800; // Adjusted for C shape
     const C_SIZE = 350;
     const C_THICKNESS = 60;
-    // const C_HOLE_MM = 2; // Not directly used for angle
-    // const C_HOLE_PX = C_HOLE_MM * MM_TO_PX; // Not directly used for angle
     const C_HOLE_ANGLE = Math.PI / 8;
-
+    
     // Elementos DOM para separación y título
     const panelRow = document.querySelector('.panel-row'); // This might not be needed anymore if using absolute positioning
     const panelCols = document.querySelectorAll('.panel-col'); // This might not be needed anymore
@@ -201,12 +198,26 @@ document.addEventListener('DOMContentLoaded', () => {
         return points;
     }
 
-    // Funciones de dibujo
+    // If you're using DOM elements for dots, change the styling from border-radius to square
+    function createDot(x, y, color) {
+        const dot = document.createElement('div');
+        dot.className = 'dot';
+        dot.style.left = `${x}px`;
+        dot.style.top = `${y}px`;
+        dot.style.backgroundColor = color;
+        // Remove any border-radius property or set it to 0
+        dot.style.borderRadius = '0';
+        dot.style.width = `${DOT_RADIUS * 2}px`;
+        dot.style.height = `${DOT_RADIUS * 2}px`;
+        canvasContainer.appendChild(dot);
+    }
+
+    // Modified function to draw square pixels instead of circles
     function drawDot(ctx, x, y, color) {
-        ctx.beginPath();
-        ctx.arc(x, y, DOT_RADIUS, 0, Math.PI * 2); // Siempre círculo, mismo radio
         ctx.fillStyle = color;
-        ctx.fill();
+        // Using fillRect to draw a square instead of arc for circles
+        // Center the square on the point by subtracting half the size
+        ctx.fillRect(x - DOT_RADIUS, y - DOT_RADIUS, DOT_RADIUS * 2, DOT_RADIUS * 2);
     }
 
     function drawAll() {
@@ -214,16 +225,18 @@ document.addEventListener('DOMContentLoaded', () => {
         ctxBlue.clearRect(0, 0, width, height);
         ctxRed.clearRect(0, 0, width, height);
 
-        // Dibujar puntos de fondo
+        // Remove corner calibration marks - no longer needed
+
+        // Dibujar puntos de fondo en NEGRO en ambos canvas
         backgroundDots.forEach(dot => {
-            drawDot(ctxBlue, dot.x, dot.y, dotColor);
-            drawDot(ctxRed, dot.x, dot.y, dotColor);
+            drawDot(ctxBlue, dot.x, dot.y, blackColor);
+            drawDot(ctxRed, dot.x, dot.y, blackColor);
         });
 
-        // Dibujar puntos de la C
+        // Dibujar puntos de la C con sus respectivos colores para efecto 3D
         cPoints.forEach(dot => {
-            drawDot(ctxBlue, dot.x, dot.y, dotColor);
-            drawDot(ctxRed, dot.x, dot.y, dotColor);
+            drawDot(ctxBlue, dot.x, dot.y, colorCyan);
+            drawDot(ctxRed, dot.x, dot.y, colorRed);
         });
 
         updateCanvasSeparation();
@@ -238,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cPoints = generateCPoints(cOrientation);
         // Generate background dots ONCE, avoiding initial C points
         backgroundDots = generateBackgroundDots(cPoints);
-        // Initial draw
+        // Initial draw (calibration marks created within drawAll)
         drawAll();
     }
 

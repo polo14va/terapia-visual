@@ -55,13 +55,7 @@ body {
     min-width: 600px;
 }
 #canvasBlue, #canvasRed {
-    background: transparent; /* Make canvas background transparent */
-    /* Remove border, radius, shadow from individual canvases */
-    /* border-radius: 8px; */
-    /* border: none; */
-    /* box-shadow: 0 2px 16px rgba(0,0,0,0.07); */
-    /* margin: 0 auto; */ /* Centering handled by container */
-    /* display: block; */ /* Handled by absolute positioning */
+    background: transparent; 
 }
 .dynamic-gap {
     transition: margin 0.3s;

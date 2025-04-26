@@ -4,7 +4,8 @@ body {
     font-family: 'Segoe UI', Arial, sans-serif;
 }
 .calib-bg {
-    background: #e6fcff;
+    /* Remove background color to match body background */
+    background: transparent;
     border-radius: 16px;
     margin: 30px auto;
     max-width: 900px;
@@ -47,7 +48,8 @@ body {
 }
 .calib-rect {
     border-radius: 8px;
-    border: 2px solid #ddd;
+    /* Remove the border from the color rectangles */
+    border: none;
     margin-bottom: 10px;
 }
 .calib-sliders {

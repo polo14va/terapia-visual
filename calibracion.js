@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const calibRectRed = document.getElementById('calibRectRed');
     const calibRectBlue = document.getElementById('calibRectBlue');
     const calibRectBg = document.getElementById('calibRectBg');
+    const calibrationMenu = document.getElementById('calibrationMenu');
     // Sliders y labels rojo
     const redR = document.getElementById('redR');
     const redG = document.getElementById('redG');
@@ -55,7 +56,75 @@ document.addEventListener('DOMContentLoaded', () => {
     // Actualizar fondo de la página en tiempo real
     function updateBodyBg() {
         document.body.style.background = `rgb(${calibBg.r},${calibBg.g},${calibBg.b})`;
+        
+        // Actualizar también el fondo del contenedor para que coincida
+        if (calibrationMenu) {
+            calibrationMenu.style.background = 'transparent';
+        }
     }
+
+    // Función para cargar colores guardados
+    function loadSavedColors() {
+        const savedRedColor = localStorage.getItem('tv_redColor');
+        const savedBlueColor = localStorage.getItem('tv_blueColor');
+        const savedBgColor = localStorage.getItem('tv_bgColor');
+        
+        if (savedRedColor) {
+            const rgb = hexToRgb(savedRedColor);
+            if (rgb) {
+                calibRed = rgb;
+                redR.value = rgb.r;
+                redG.value = rgb.g;
+                redB.value = rgb.b;
+                redRVal.textContent = rgb.r;
+                redGVal.textContent = rgb.g;
+                redBVal.textContent = rgb.b;
+            }
+        }
+        
+        if (savedBlueColor) {
+            const rgb = hexToRgb(savedBlueColor);
+            if (rgb) {
+                calibBlue = rgb;
+                blueR.value = rgb.r;
+                blueG.value = rgb.g;
+                blueB.value = rgb.b;
+                blueRVal.textContent = rgb.r;
+                blueGVal.textContent = rgb.g;
+                blueBVal.textContent = rgb.b;
+            }
+        }
+        
+        if (savedBgColor) {
+            const rgb = hexToRgb(savedBgColor);
+            if (rgb) {
+                calibBg = rgb;
+                bgR.value = rgb.r;
+                bgG.value = rgb.g;
+                bgB.value = rgb.b;
+                bgRVal.textContent = rgb.r;
+                bgGVal.textContent = rgb.g;
+                bgBVal.textContent = rgb.b;
+            }
+        }
+        
+        drawCalibRects();
+        updateBodyBg();
+    }
+    
+    // Función para convertir hex a rgb
+    function hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+    }
+
+    // Cargar colores guardados al iniciar
+    loadSavedColors();
+
     // Sliders rojo
     [redR, redG, redB].forEach((slider, idx) => {
         slider.addEventListener('input', () => {
@@ -93,8 +162,6 @@ document.addEventListener('DOMContentLoaded', () => {
             updateBodyBg();
         });
     });
-    drawCalibRects();
-    updateBodyBg();
 
     // Botón valores por defecto
     defaultColorsBtn.addEventListener('click', () => {
@@ -110,11 +177,17 @@ document.addEventListener('DOMContentLoaded', () => {
         drawCalibRects();
         updateBodyBg();
     });
-    // Botón guardar
+    // Botón guardar - simplificado para guardar solo los 3 valores hexadecimales
     saveColorsBtn.addEventListener('click', () => {
-        localStorage.setItem('tv_calibRectRed', rgbToHex(calibRed.r, calibRed.g, calibRed.b));
-        localStorage.setItem('tv_calibRectBlue', rgbToHex(calibBlue.r, calibBlue.g, calibBlue.b));
-        localStorage.setItem('tv_calibBg', rgbToHex(calibBg.r, calibBg.g, calibBg.b));
+        // Solo guardamos los tres valores hexadecimales
+        const redHex = rgbToHex(calibRed.r, calibRed.g, calibRed.b);
+        const blueHex = rgbToHex(calibBlue.r, calibBlue.g, calibBlue.b);
+        const bgHex = rgbToHex(calibBg.r, calibBg.g, calibBg.b);
+        
+        localStorage.setItem('tv_redColor', redHex);
+        localStorage.setItem('tv_blueColor', blueHex);
+        localStorage.setItem('tv_bgColor', bgHex);
+        
         alert('Colores guardados correctamente.');
     });
     function rgbToHex(r,g,b) {
