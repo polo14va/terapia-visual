@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calibración de Color</title>
+    <link rel="stylesheet" href="calibracion.css">
+</head>
+<body>
+    <section id="calibrationMenu" class="calib-bg" style="display:block;">
+        <h2 class="calib-title">CALIBRACIÓN DE COLOR</h2>
+        <p class="calib-desc">Compruebe si sus filtros rojo/azul (o rojo/verde) son complementarios con los colores de su pantalla: a través del filtro rojo el rectángulo rojo debe ser invisible, mientras que con el filtro azul desaparecerá el rectángulo azul.<br>Si alguno de los rectángulos es visible con su filtro correspondiente, le recomendamos que calibre los colores de su pantalla.</p>
+        <div class="calib-rects-row">
+            <div class="calib-rect-col">
+                <div class="calib-rect-label">ROJO: <span id="redRLabel">255</span></div>
+                <canvas id="calibRectRed" width="220" height="100" class="calib-rect"></canvas>
+                <div class="calib-sliders">
+                    <label>ROJO: <input type="range" min="0" max="255" id="redR" value="255"><span id="redRVal">255</span></label>
+                    <label>VERDE: <input type="range" min="0" max="255" id="redG" value="0"><span id="redGVal">0</span></label>
+                    <label>AZUL: <input type="range" min="0" max="255" id="redB" value="0"><span id="redBVal">0</span></label>
+                </div>
+            </div>
+            <div class="calib-rect-col">
+                <div class="calib-rect-label">AZUL: <span id="blueBLabel">255</span></div>
+                <canvas id="calibRectBlue" width="220" height="100" class="calib-rect"></canvas>
+                <div class="calib-sliders">
+                    <label>ROJO: <input type="range" min="0" max="255" id="blueR" value="0"><span id="blueRVal">0</span></label>
+                    <label>VERDE: <input type="range" min="0" max="255" id="blueG" value="236"><span id="blueGVal">236</span></label>
+                    <label>AZUL: <input type="range" min="0" max="255" id="blueB" value="255"><span id="blueBVal">255</span></label>
+                </div>
+            </div>
+        </div>
+        <div class="calib-bg-row">
+            <div class="calib-bg-label">FONDO GRIS</div>
+            <canvas id="calibRectBg" width="440" height="60" class="calib-bg-rect"></canvas>
+            <div class="calib-sliders calib-bg-sliders">
+                <label>ROJO: <input type="range" min="0" max="255" id="bgR" value="255"><span id="bgRVal">255</span></label>
+                <label>VERDE: <input type="range" min="0" max="255" id="bgG" value="255"><span id="bgGVal">255</span></label>
+                <label>AZUL: <input type="range" min="0" max="255" id="bgB" value="255"><span id="bgBVal">255</span></label>
+            </div>
+        </div>
+        <div class="calib-btn-row">
+            <button id="defaultColorsBtn" class="calib-btn calib-btn-secondary">Valores por defecto</button>
+            <button id="saveColorsBtn" class="calib-btn calib-btn-primary">Guardar</button>
+            <button id="startBtn" class="calib-btn calib-btn-primary">Empezar</button>
+        </div>
+    </section>
+    <script src="calibracion.js"></script>
+</body>
+</html>

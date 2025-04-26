@@ -1,0 +1,118 @@
+body {
+    background: rgb(240,255,255);
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+.calib-bg {
+    background: #e6fcff;
+    border-radius: 16px;
+    margin: 30px auto;
+    max-width: 900px;
+    padding: 32px 32px 24px 32px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+}
+.calib-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #222;
+}
+.calib-desc {
+    text-align: center;
+    color: #444;
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+}
+.calib-rects-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+.calib-rect-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+.calib-rect-label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #d32f2f;
+}
+.calib-rect-col:last-child .calib-rect-label {
+    color: #0288d1;
+}
+.calib-rect {
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    margin-bottom: 10px;
+}
+.calib-sliders {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 210px;
+}
+.calib-sliders label {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    color: #333;
+    gap: 8px;
+}
+.calib-sliders input[type=range] {
+    flex: 1;
+    margin: 0 8px;
+}
+.calib-bg-row {
+    margin: 30px 0 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.calib-bg-label {
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 8px;
+}
+.calib-bg-rect {
+    border-radius: 8px;
+    border: 2px solid #bbb;
+    margin-bottom: 10px;
+}
+.calib-bg-sliders {
+    width: 420px;
+}
+.calib-btn-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 18px;
+    margin-top: 18px;
+}
+.calib-btn {
+    font-size: 1.1rem;
+    padding: 8px 22px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s;
+}
+.calib-btn-primary {
+    background: #00bcd4;
+    color: #fff;
+}
+.calib-btn-primary:hover {
+    background: #0097a7;
+}
+.calib-btn-secondary {
+    background: #fff3e0;
+    color: #ff7043;
+    border: 1px solid #ff7043;
+}
+.calib-btn-secondary:hover {
+    background: #ffe0b2;
+}
