@@ -1,124 +1,126 @@
-html {
-    height: 100%; /* Ensure html takes full height */
-    background: transparent; /* Ensure html background is transparent */
+:root {
+  --primary-color: #6a8bbd;
+  --btn-border-color: #00e6f6;
+  --btn-hover-bg: #e0fafd;
+  --btn-hover-color: #0099a8;
 }
 
 html, body {
-    overflow: hidden; /* Disable scrolling */
-    /* height: 100%; */ /* Already set on html and body separately */
-}
-
-body {
-    /* background: #fafbfc; */ /* REMOVED - Rely on JS to set background */
-    margin: 0;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    height: 100%; /* Ensure body takes full height */
-    background: transparent; /* Ensure body background is transparent by default */
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: transparent;
+  font-family: 'Segoe UI', Arial, sans-serif;
 }
 
 .main-app {
-    width: 100vw;
-    min-height: 100vh;
-    /* background: #fafbfc; */ /* REMOVED - Make main wrapper transparent */
+  width: 100vw;
+  min-height: 100vh;
 }
+
 .main-header {
-    margin-top: 40px;
-    margin-left: 40px;
+  margin: 40px 0 0 40px;
 }
+
 .main-title-left {
-    font-size: 3.2rem;
-    color: #6a8bbd;
-    font-weight: 700;
-    text-align: left;
-    margin: 0 0 30px 0;
-    letter-spacing: 1px;
+  font-size: 3.2rem;
+  color: var(--primary-color);
+  font-weight: 700;
+  margin: 0 0 30px;
+  letter-spacing: 1px;
 }
+
 .triangle {
-    font-size: 2.2rem;
-    vertical-align: middle;
-    color: #6a8bbd;
-    margin-left: 10px;
+  font-size: 2.2rem;
+  vertical-align: middle;
+  color: var(--primary-color);
+  margin-left: 10px;
 }
+
 .panel-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: flex-start;
-    /* gap eliminado para controlarlo dinámicamente */
-    margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 40px;
 }
+
 .panel-col {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 600px;
 }
-#canvasBlue, #canvasRed {
-    background: transparent; 
+
+.panel-btns-top,
+.panel-btns-bottom {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin: 30px 0;
 }
-.dynamic-gap {
-    transition: margin 0.3s;
-}
-.panel-btns-top, .panel-btns-bottom {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 60px;
-    margin: 30px 0 30px 0;
-}
+
 .circle-btn {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    border: 6px solid #00e6f6;
-    background: none;
-    color: #00e6f6;
-    font-size: 2.8rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s;
+  width: 70px;
+  height: 70px;
+  border: 6px solid var(--btn-border-color);
+  border-radius: 50%;
+  background: none;
+  color: var(--btn-border-color);
+  font-size: 2.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
 }
+
 .circle-btn:hover {
-    background: #e0fafd;
-    color: #0099a8;
+  background: var(--btn-hover-bg);
+  color: var(--btn-hover-color);
 }
+
 .canvas-center-container {
-    position: relative;
-    width: 600px; /* Match canvas size */
-    height: 600px; /* Match canvas size */
-    margin: 40px auto; /* Center the container */
-    overflow: hidden; /* Ensure canvases stay within bounds */
-    background: transparent; /* Explicitly set background to transparent */
+  position: relative;
+  width: 600px;
+  height: 600px;
+  margin: 40px auto;
+  overflow: hidden;
 }
 
 .canvas-abs {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    transition: left 0.3s;
-    background-color: transparent !important; /* Ensure canvases are transparent */
-    z-index: 1;
-    opacity: 1;
-    mix-blend-mode: normal;
-    pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: left 0.3s ease-out, top 0.3s ease-out;
+  background-color: transparent;
+  opacity: 0.95;
+  pointer-events: none;
 }
-#canvasRed {
-    z-index: 2; /* Red remains on top */
-}
+
+.canvas-background { z-index: 0; }
+#canvasBlue { z-index: 1; }
+#canvasRed { z-index: 2; }
+
 .info-panel {
-    position: absolute;
-    top: 30px;
-    right: 60px;
-    font-size: 2rem;
-    color: #6a8bbd;
-    font-weight: bold;
-    background: rgba(255,255,255,0.85);
-    padding: 10px 24px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-    z-index: 10;
+  position: absolute;
+  top: 30px;
+  right: 60px;
+  font-size: 2rem;
+  color: var(--primary-color);
+  font-weight: bold;
+  background: rgba(255,255,255,0.85);
+  padding: 10px 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  z-index: 10;
+}
+
+.dynamic-gap {
+  transition: margin 0.3s;
+}
+
+#canvasBlue, #canvasRed {
+  background: transparent; 
 }
