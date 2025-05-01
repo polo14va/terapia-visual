@@ -12,6 +12,18 @@
             <h1 class="main-title-left">Vision <span id="stepTitle">0</span> <span class="triangle">&#9651;</span></h1>
         </header>
         <div id="infoDiv" class="info-panel"></div>
+        <div id="controls-panel" class="controls-panel">
+          <label>Tamaño C: <input type="range" id="sliderCSize" min="100" max="550" value="350"><span id="valCSize">350</span></label>
+          <label>Grosor C: <input type="range" id="sliderCThickness" min="10" max="150" value="60"><span id="valCThickness">60</span></label>
+          <label>Abertura C: <input type="range" id="sliderCHole" min="5" max="90" value="22"><span id="valCHole">22</span></label>
+          <label>Puntos fondo: <input type="range" id="sliderBGCount" min="1000" max="30000" value="12000"><span id="valBGCount">12000</span></label>
+          <label>Puntos color: <input type="range" id="sliderFillerCount" min="1000" max="30000" value="12000"><span id="valFillerCount">12000</span></label>
+          <label>Tamaño punto: <input type="range" id="sliderDotRadius" min="1" max="6" value="1"><span id="valDotRadius">1</span></label>
+          <label>Color rojo: <input type="color" id="colorRedPicker" value="#950003"></label>
+          <label>Color azul: <input type="color" id="colorBluePicker" value="#107fff"></label>
+          <label>Color fondo: <input type="color" id="colorBgPicker" value="#6e61fd"></label>
+          <button id="btnUpdatePattern">Actualizar</button>
+        </div>
         <div class="canvas-center-container">
             <canvas id="canvasBackground" width="600" height="600" class="canvas-abs canvas-background"></canvas>
             <canvas id="canvasBlue" width="600" height="600" class="canvas-abs"></canvas>
