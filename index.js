@@ -286,10 +286,6 @@ document.addEventListener('DOMContentLoaded', () => {
   blueContext = blueCanvas.getContext('2d', { willReadFrequently: true });
   redContext  = redCanvas.getContext('2d', { willReadFrequently: true });
 
-  const scoreboard = new Scoreboard();
-  const channelControls = document.getElementById('channel-controls');
-  scoreboard.el.appendChild(channelControls);
-
   document.body.insertBefore(
     Object.assign(document.createElement('div'), {
       id: 'scoreboard',
@@ -308,9 +304,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('mode-convergence').addEventListener('click', () => selectMode('convergence'));
   document.getElementById('mode-divergence').addEventListener('click', () => selectMode('divergence'));
   document.getElementById('mode-mixed').addEventListener('click', () => selectMode('mixed'));
-  document.getElementById('restartButton').addEventListener('click', () => {
-    document.getElementById('menu').style.display = 'flex';
-  });
 });
 
 // ============================================================================
