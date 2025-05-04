@@ -3,13 +3,13 @@ let currentSeparation = 1.5;
 const separationStep = 0.5;
 const pixelsPerUnit = 4;
 const dotSize = 1;
-const numBackgroundDots = 50000;
-const numCDots = 25000;
+const numBackgroundDots = 100000;
+const numCDots = 5000;
 
 // Constantes geométricas
 const hiddenCRadiusRatio = 0.25;
 const hiddenCLineWidthRatio = 0.08;
-const hiddenCGapSize = Math.PI / 2.5;
+const hiddenCGapSize = Math.PI / 6;
 const hiddenCGapAngle = 0;
 const edgeBiasWidthRatio = 0.1;
 
@@ -74,27 +74,29 @@ function draw() {
     const hiddenCCenterY = squareY + squareSize / 2;
     const edgeBiasWidth = squareSize * edgeBiasWidthRatio;
 
-    drawBackgroundDots(squareX, squareY, squareSize, hiddenCCenterX, hiddenCCenterY, hiddenCRadius, hiddenCLineWidth, edgeBiasWidth);
+    drawBackgroundDots(squareX, squareY, squareSize, anaglyphShift);
     drawAnaglyphCDots(hiddenCCenterX, hiddenCCenterY, hiddenCRadius, hiddenCLineWidth, anaglyphShift);
-    drawOuterCs(squareSize);
 }
 
-function drawBackgroundDots(squareX, squareY, squareSize, cX, cY, cRadius, cLineWidth, edgeBiasWidth) {
-    const colors = [currentRedColor, currentBlueColor, '#000000'];
-    let drawn = 0, attempts = 0, maxAttempts = numBackgroundDots * 10;
-    while (drawn < numBackgroundDots && attempts < maxAttempts) {
-        attempts++;
-        const x = squareX + Math.random() * squareSize;
+function drawBackgroundDots(squareX, squareY, squareSize, shift) {
+    const halfDots = Math.floor(numBackgroundDots / 2);
+
+    // --- Cuadrado rojo completo (izquierda) ---
+    const redX = squareX - shift;
+    for (let i = 0; i < halfDots; i++) {
+        const x = redX + Math.random() * squareSize;
         const y = squareY + Math.random() * squareSize;
-        if (!isInsideHiddenC(x, y, cX, cY, cRadius, cLineWidth, hiddenCGapAngle, hiddenCGapSize)) {
-            let color, r = Math.random();
-            if (x < squareX + edgeBiasWidth) color = r < 0.7 ? currentBlueColor : (r < 0.85 ? currentRedColor : colors[2]);
-            else if (x > squareX + squareSize - edgeBiasWidth) color = r < 0.7 ? currentRedColor : (r < 0.85 ? currentBlueColor : colors[2]);
-            else color = colors[Math.floor(Math.random() * colors.length)];
-            ctx.fillStyle = color;
-            ctx.fillRect(x - dotSize / 2, y - dotSize / 2, dotSize, dotSize);
-            drawn++;
-        }
+        ctx.fillStyle = currentRedColor;
+        ctx.fillRect(x - dotSize / 2, y - dotSize / 2, dotSize, dotSize);
+    }
+
+    // --- Cuadrado azul completo (derecha) ---
+    const blueX = squareX + shift;
+    for (let i = 0; i < halfDots; i++) {
+        const x = blueX + Math.random() * squareSize;
+        const y = squareY + Math.random() * squareSize;
+        ctx.fillStyle = currentBlueColor;
+        ctx.fillRect(x - dotSize / 2, y - dotSize / 2, dotSize, dotSize);
     }
 }
 
@@ -114,26 +116,6 @@ function drawAnaglyphCDots(centerX, centerY, radius, lineWidth, shift) {
             drawn++;
         }
     }
-}
-
-function drawOuterCs(squareSize) {
-    const radius = squareSize * 0.075;
-    const lineWidth = radius * 0.35;
-    const gapSize = Math.PI / 2.5;
-    const vertOffset = squareSize * 0.6;
-    const horizSpacing = squareSize * 0.2;
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    const topY = centerY - vertOffset;
-    const bottomY = centerY + vertOffset;
-    const leftX = centerX - horizSpacing;
-    const rightX = centerX + horizSpacing;
-    const gapDown = Math.PI / 2;
-    const gapUp = (3 * Math.PI) / 2;
-    drawOuterC(leftX, topY, radius, lineWidth, gapDown, gapSize, currentLandoltCColor);
-    drawOuterC(rightX, topY, radius, lineWidth, gapUp, gapSize, currentLandoltCColor);
-    drawOuterC(leftX, bottomY, radius, lineWidth, gapDown, gapSize, currentLandoltCColor);
-    drawOuterC(rightX, bottomY, radius, lineWidth, gapUp, gapSize, currentLandoltCColor);
 }
 
 function handleKeyDown(event) {
