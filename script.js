@@ -102,16 +102,68 @@ const render = () => {
 
     const dots = buildDots(square, cx, cy, r, lw);
 
+    // --- Draw ring first (shifted dots) ---
+    redCtx.clearRect(0, 0, canvas.width, canvas.height);
     redCtx.fillStyle = col.red;
-    drawChannel(redCtx, dots, -shift);
+    for (const [x, y] of dots.ring) {
+        redCtx.fillRect(
+            Math.round(x - shift - cfg.dot / 2),
+            Math.round(y - cfg.dot / 2),
+            cfg.dot, cfg.dot
+        );
+    }
 
+    // --- Background for red: fill except where ring is ---
+    let countR = 0;
+    const cxR = cx - shift;
+    while (countR < cfg.bgDots) {
+        const rx = square.x + Math.random() * square.size;
+        const ry = square.y + Math.random() * square.size;
+        if (inRing(rx, ry, cxR, cy, r, lw) && !inGap(rx, ry, cxR, cy, r)) continue;
+        redCtx.fillRect(
+            Math.round(rx - cfg.dot / 2),
+            Math.round(ry - cfg.dot / 2),
+            cfg.dot, cfg.dot
+        );
+        countR++;
+    }
+
+    // --- Blue channel ---
+    blueCtx.clearRect(0, 0, canvas.width, canvas.height);
     blueCtx.fillStyle = col.blue;
-    drawChannel(blueCtx, dots, shift);
+    for (const [x, y] of dots.ring) {
+        blueCtx.fillRect(
+            Math.round(x + shift - cfg.dot / 2),
+            Math.round(y - cfg.dot / 2),
+            cfg.dot, cfg.dot
+        );
+    }
 
+    let countB = 0;
+    const cxB = cx + shift;
+    while (countB < cfg.bgDots) {
+        const bx = square.x + Math.random() * square.size;
+        const by = square.y + Math.random() * square.size;
+        if (inRing(bx, by, cxB, cy, r, lw) && !inGap(bx, by, cxB, cy, r)) continue;
+        blueCtx.fillRect(
+            Math.round(bx - cfg.dot / 2),
+            Math.round(by - cfg.dot / 2),
+            cfg.dot, cfg.dot
+        );
+        countB++;
+    }
+
+    // Composite channels with additive blending for red/cyan anaglyph
     ctx.fillStyle = col.bg;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(blueCanvas, 0, 0);
-    ctx.drawImage(redCanvas, 0, 0);
+    ctx.globalCompositeOperation = 'lighter';
+    if (document.getElementById('showBlue').checked) {
+        ctx.drawImage(blueCanvas, 0, 0);
+    }
+    if (document.getElementById('showRed').checked) {
+        ctx.drawImage(redCanvas, 0, 0);
+    }
+    ctx.globalCompositeOperation = 'source-over';
 };
 
 const keyHandler = e => {
@@ -133,9 +185,9 @@ const updateScore = () => {
 
 document.addEventListener('DOMContentLoaded', () => {
     col = {
-        red: getColorFromStorage('tv_redColor', 'rgb(149,0,3)'),
-        blue: getColorFromStorage('tv_blueColor', 'rgb(16,127,255)'),
-        bg: getColorFromStorage('tv_bgColor', 'rgba(110,97,253,.7)')
+        red: getColorFromStorage('tv_redColor', 'rgb(255,0,0)'),
+        blue: getColorFromStorage('tv_blueColor', 'rgb(0,255,255)'),
+        bg: getColorFromStorage('tv_bgColor', '#000')
     };
     canvas = document.getElementById('anaglyphCanvas');
     if (!canvas) return;
@@ -154,4 +206,6 @@ document.addEventListener('DOMContentLoaded', () => {
     randGap(); render(); updateScore();
     addEventListener('keydown', keyHandler);
     addEventListener('resize', () => { randGap(); render(); });
+    document.getElementById('showRed').addEventListener('change', render);
+    document.getElementById('showBlue').addEventListener('change', render);
 });
