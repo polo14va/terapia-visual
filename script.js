@@ -164,7 +164,7 @@ function render() {
     // parse pure colors
     const [rR, gR, bR] = col.red.match(/\d+/g).map(Number);
     const [rB, gB, bB] = col.blue.match(/\d+/g).map(Number);
-
+    const [rBg, gBg, bBg] = col.bg.match(/\d+/g).map(Number);
     // output buffer
     const out = ctx.createImageData(width, height);
     const outData = out.data;
@@ -180,8 +180,12 @@ function render() {
             outData[i] = rB; outData[i + 1] = gB; outData[i + 2] = bB; outData[i + 3] = 255;
         } else if (hasR) {
             outData[i] = rR; outData[i + 1] = gR; outData[i + 2] = bR; outData[i + 3] = 255;
+        } else {
+          outData[i]     = rBg;
+          outData[i + 1] = gBg;
+          outData[i + 2] = bBg;
+          outData[i + 3] = 255;
         }
-        // else leave background
     }
 
     // put composed image
