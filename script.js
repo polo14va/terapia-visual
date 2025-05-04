@@ -76,12 +76,12 @@ function draw() {
 
     drawBackgroundDots(squareX, squareY, squareSize, anaglyphShift);
     drawAnaglyphCDots(hiddenCCenterX, hiddenCCenterY, hiddenCRadius, hiddenCLineWidth, anaglyphShift);
+    drawColoredCs(squareX, squareY, squareSize, anaglyphShift);
 }
 
 function drawBackgroundDots(squareX, squareY, squareSize, shift) {
     const halfDots = Math.floor(numBackgroundDots / 2);
-
-    // --- Cuadrado rojo completo (izquierda) ---
+    // --- Red square (shifted left) ---
     const redX = squareX - shift;
     for (let i = 0; i < halfDots; i++) {
         const x = redX + Math.random() * squareSize;
@@ -89,13 +89,23 @@ function drawBackgroundDots(squareX, squareY, squareSize, shift) {
         ctx.fillStyle = currentRedColor;
         ctx.fillRect(x - dotSize / 2, y - dotSize / 2, dotSize, dotSize);
     }
-
-    // --- Cuadrado azul completo (derecha) ---
+    // --- Blue square (shifted right) ---
     const blueX = squareX + shift;
     for (let i = 0; i < halfDots; i++) {
         const x = blueX + Math.random() * squareSize;
         const y = squareY + Math.random() * squareSize;
         ctx.fillStyle = currentBlueColor;
+        ctx.fillRect(x - dotSize / 2, y - dotSize / 2, dotSize, dotSize);
+    }
+    // --- Black dots only in overlap area ---
+    const overlapWidth = squareSize - 2 * shift;
+    if (overlapWidth <= 0) return;
+    const blackDots = Math.floor(halfDots * (overlapWidth / squareSize)/16);
+    const overlapStart = squareX - shift + shift; // == squareX
+    for (let i = 0; i < blackDots; i++) {
+        const x = squareX + shift + Math.random() * overlapWidth;
+        const y = squareY + Math.random() * squareSize;
+        ctx.fillStyle = '#000';
         ctx.fillRect(x - dotSize / 2, y - dotSize / 2, dotSize, dotSize);
     }
 }
@@ -110,9 +120,9 @@ function drawAnaglyphCDots(centerX, centerY, radius, lineWidth, shift) {
         const y = centerY + Math.sin(angle) * dist;
         if (isInsideHiddenC(x, y, centerX, centerY, radius, lineWidth, hiddenCGapAngle, hiddenCGapSize)) {
             ctx.fillStyle = currentRedColor;
-            ctx.fillRect(x + shift - dotSize / 2, y - dotSize / 2, dotSize, dotSize);
-            ctx.fillStyle = currentBlueColor;
             ctx.fillRect(x - shift - dotSize / 2, y - dotSize / 2, dotSize, dotSize);
+            ctx.fillStyle = currentBlueColor;
+            ctx.fillRect(x + shift - dotSize / 2, y - dotSize / 2, dotSize, dotSize);
             drawn++;
         }
     }
@@ -143,3 +153,29 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', draw);
     draw();
 });
+
+function drawOuterCs(squareSize, shift) {
+    const radius = squareSize * hiddenCRadiusRatio;
+    const lineWidth = squareSize * hiddenCLineWidthRatio;
+    const gapSize = hiddenCGapSize;
+    const baseCenterY = window.innerHeight / 2;
+    const vertOffset = squareSize * 0.25;
+    const horizSpacing = squareSize * 0.3;
+    const redCenterX = window.innerWidth / 2 - horizSpacing;
+    const blueCenterX = window.innerWidth / 2 + horizSpacing;
+
+    // --- Cuadrado rojo (izquierda) ---
+    drawCornerCs(redCenterX, baseCenterY, vertOffset, horizSpacing,
+                 radius, lineWidth, gapSize, currentRedColor);
+
+    // --- Cuadrado azul (derecha) ---
+    drawCornerCs(blueCenterX, baseCenterY, vertOffset, horizSpacing,
+                 radius, lineWidth, gapSize, currentBlueColor);
+}
+
+function drawCornerCs(centerX, baseCenterY, vertOffset, horizSpacing, radius, lineWidth, gapSize, color) {
+    drawOuterC(centerX, baseCenterY - vertOffset, radius, lineWidth, 0, gapSize, color);
+    drawOuterC(centerX, baseCenterY + vertOffset, radius, lineWidth, Math.PI, gapSize, color);
+    drawOuterC(centerX - horizSpacing, baseCenterY, radius, lineWidth, Math.PI / 2, gapSize, color);
+    drawOuterC(centerX + horizSpacing, baseCenterY, radius, lineWidth, 3 * Math.PI / 2, gapSize, color);
+}
